@@ -13,3 +13,4 @@
 * Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan tietokohteita.
 * Käyttäjä näkee sovellukseen lisätyt tietokohteet
 * Käyttäjä pystyy etsimään tietokohteita hakusanalla
+* Sovelluksessa on käyttäjäsivut, jotka näyttävät tilastoja ja käyttäjän lisäämät tietokohteet.
