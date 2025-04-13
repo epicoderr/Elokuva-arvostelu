@@ -14,3 +14,4 @@
 * Käyttäjä näkee sovellukseen lisätyt tietokohteet
 * Käyttäjä pystyy etsimään tietokohteita hakusanalla
 * Sovelluksessa on käyttäjäsivut, jotka näyttävät tilastoja ja käyttäjän lisäämät tietokohteet.
+* Käyttäjä pystyy valitsemaan tietokohteelle yhden tai useamman luokittelun. Mahdolliset luokat ovat tietokannassa.
