@@ -4,7 +4,7 @@
 {% block title %}{{ item.title }}{% endblock %}
 
 {% block content %}
-  <h2>{{ item.title }}</h2>
+  <h2>{{ item.title | show_lines }}</h2>
 
   {% if session.user_id == item.user_id %}
     <p>
@@ -14,7 +14,7 @@
     </p>
   {% endif %}
   {% for image in images %}
-  <img src="/image/{{ image.id }}" />
+  <img src="/image/{{ image.id }}" alt="Ilmoituksen kuva" />
   {% endfor %}
 
   <p>{{ item.description }}</p>

@@ -9,6 +9,7 @@ import config
 import items
 import re
 import users
+import markupsafe
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -22,6 +23,12 @@ def check_csrf():
         abort(403)
     if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 @app.route("/")
 def index():

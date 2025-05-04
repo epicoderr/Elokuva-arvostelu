@@ -6,20 +6,20 @@
 <h1>Uusi Elokuva</h1>
 <form action="/create_item" method="post">
   <p>
-    Otsikko: <br />
-    <input type="text" name="title" maxlength="80" required/>
+    <label for="title">Otsikko:</label> <br />
+    <input type="text" name="title" id="title" maxlength="50" required />
   </p>
   <p>
-      Kuvaus: <br />
-      <textarea name="description" rows="8" cols="40" maxlength="1000" required></textarea>
+    <label for="description">Kuvaus</label>: <br />
+    <textarea name="description" id="description" rows="8" cols="60" maxlength="1000" required></textarea>
   </p>
   <p>
-      Arvostelu: <br />
-      <input type="text" name="review" size="8" pattern="^([0-9]|10)" required /> /10
+    <label for="review">Arvostelu</label>: <br />
+    <input type="text" name="review" id="review" size="8" pattern="^([0-9]|10)" required /> /10
   </p>
   <p>
-    Genre: <br />
-    <select name="genre"
+    <label for="genre">Genre</label>: <br />
+    <select name="genre" id="genre" required>
       <option value="">(valitse)</option>
       <option value="komedia">komedia</option>
       <option value="draama">draama</option>
