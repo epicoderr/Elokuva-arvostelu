@@ -46,7 +46,8 @@ def show_item(item_id):
     if not item:
         abort(404)
     classes = items.get_classes(item_id)
-    return render_template("show_item.html", item=item, classes=classes)
+    comments = items.get_comments(item_id)
+    return render_template("show_item.html", item=item, classes=classes, comments=comments)
 
 
 @app.route("/new_item")
@@ -70,13 +71,43 @@ def create_item():
     user_id = session["user_id"]
 
     classes = []
-    genre = request.form["genre"] #will add more classes later
+    genre = request.form["genre"] 
     if genre:
         classes.append(("Genre", genre))
 
     items.add_item(title, description, review, user_id, classes)
 
     return redirect("/")
+
+@app.route("/create_comment/<int:item_id>", methods=["POST"])
+def create_comment(item_id):
+    require_login()
+
+    content = request.form["content"]
+    user_id = session["user_id"]
+
+    items.add_comment(item_id, user_id, content)
+
+    return redirect(f"/item/{item_id}")
+
+@app.route("/remove_comment/<int:comment_id>", methods=["GET", "POST"])
+def remove_comment(comment_id):
+    require_login()
+    comment = items.get_comment(comment_id)
+    if not comment:
+        abort(404)
+    if comment["user_id"] != session["user_id"]:
+        abort(403)
+
+    if request.method == "GET":
+        return render_template("remove_comment.html", comment=comment)
+    
+    if request.method == "POST":
+        if "remove" in request.form:
+            items.remove_comment(comment_id)
+            return redirect(f"/item/{comment['item_id']}")
+        else:
+            return redirect(f"/item/{comment['item_id']}")
 
 @app.route("/edit_item/<int:item_id>")
 def edit_item(item_id):

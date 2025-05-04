@@ -22,3 +22,12 @@ def query(sql, params=[]):
     result = con.execute(sql, params).fetchall()
     con.close()
     return result
+
+def get_db():
+    if "db" not in g:
+        g.db = sqlite3.connect("database.db", detect_types=sqlite3.PARSE_DECLTYPES)
+        g.db.row_factory = sqlite3.Row
+    return g.db
+
+def commit():
+    get_db().commit()

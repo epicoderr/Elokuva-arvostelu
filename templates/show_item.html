@@ -1,32 +1,59 @@
+{# templates/show_item.html #}
 {% extends "layout.html" %}
 
 {% block title %}{{ item.title }}{% endblock %}
 
 {% block content %}
-<h2>{{ item.title }}</h2>
-{% if session.user_id == item.user_id %}
-<p>
-<a href="/edit_item/{{ item.id }}">Muokkaa</a>
-<a href="/remove_item/{{ item.id }}">Poista</a>
-</p>
-{% endif %}
-<p>
-    {{ item.description }}
-</p>
-<p>
-    Arvostelu: {{ item.review }}/10    
-</p>
-<p>
-    Ilmoittaja: <a href="/user/{{ item.user_id }}">{{ item.username }}</a>
-</p>
-{% if classes %}
-<p>
-  Luokat:
-<ul>
-  {% for class in classes %}
-  <li>{{ class.title }}: {{ class.value }}</li>
-  {% endfor %}
-</ul>
-</p>
-{% endif %}
+  <h2>{{ item.title }}</h2>
+
+  {% if session.user_id == item.user_id %}
+    <p>
+      <a href="/edit_item/{{ item.id }}">Muokkaa</a>
+      <a href="/remove_item/{{ item.id }}">Poista</a>
+    </p>
+  {% endif %}
+
+  <p>{{ item.description }}</p>
+  <p>Arvostelu: {{ item.review }}/10</p>
+  <p>Ilmoittaja: <a href="/user/{{ item.user_id }}">{{ item.username }}</a></p>
+
+  {% if classes %}
+    <h3>Luokat</h3>
+    <ul>
+      {% for class in classes %}
+        <li>{{ class.title }}: {{ class.value }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <h2>Kommentit</h2>
+  {% if comments %}
+    <ul>
+      {% for comment in comments %}
+        <li>
+          <strong>{{ comment.username }}</strong>:
+          {{ comment.content | e }}
+          <br>
+          <small>{{ comment.created_at }}</small>
+
+          {% if session.user_id == comment.user_id %}
+            <a href="/remove_comment/{{ comment.id }}">Poista</a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Ei kommentteja vielä.</p>
+  {% endif %}
+
+  <h2>Uusi kommentti</h2>
+  {% if session.user_id %}
+    <form action="/create_comment/{{ item.id }}" method="post">
+      <textarea name="content" rows="4" cols="50"
+                placeholder="Kirjoita kommentti..." required></textarea>
+      <button type="submit">Lähetä</button>
+    </form>
+  {% else %}
+    <p><a href="/login">Kirjaudu sisään</a> kommentoidaksesi.</p>
+  {% endif %}
 {% endblock %}

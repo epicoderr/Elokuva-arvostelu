@@ -55,3 +55,41 @@ def find_items(query):
     """
     like = "%" + query + "%"
     return db.query(sql, [like, like])
+
+def add_comment(item_id, user_id, content):
+    sql = """
+      INSERT INTO comments (item_id, user_id, content)
+      VALUES (?, ?, ?)
+    """
+    db.execute(sql, (item_id, user_id, content))
+    db.commit()
+
+def get_comments(item_id):
+    sql = """
+      SELECT
+        c.id,
+        c.item_id,
+        c.user_id,       
+        c.content,
+        c.created_at,
+        u.username
+      FROM comments c
+      JOIN users u ON c.user_id = u.id
+      WHERE c.item_id = ?
+      ORDER BY c.created_at DESC
+    """
+    return db.query(sql, (item_id,))
+
+def get_comment(comment_id):
+    sql = """
+      SELECT id, item_id, user_id, content, created_at
+      FROM comments
+      WHERE id = ?
+    """
+    results = db.query(sql, (comment_id,))
+    return results[0] if results else None
+
+def remove_comment(comment_id):
+    sql = "DELETE FROM comments WHERE id = ?"
+    db.execute(sql, (comment_id,))
+    db.commit()
