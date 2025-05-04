@@ -1,28 +1,23 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Elokuvan muokkaus</title>
-</head>
+{% block title %}Elokuvan muokkaus{% endblock %}
 
-<body>
-    <h1>Elokuvan muokkaus</h1>
-  <form action="/update_item" method="post">
-    <p>
-      Otsikko: <br />
-      <input type="text" name="title" value="{{ item.title }}"/>
-    </p>
-    <p>
-        Kuvaus: <br />
-        <textarea name="description" rows="8" cols="40">{{ item.description }}</textarea>
-    </p>
-    <p>
-        Arvostelu: <br />
-        <input type="text" name="review" size="8" value="{{ item.review }}"/> /10
-    </p>
-    <input type="hidden" name="item_id" value="{{ item.id }}" />
-    <input type="submit" value="Päivitä elokuvaa" />
-  </form>
-</body>
-
-</html>
+{% block content %}
+<h1>Elokuvan muokkaus</h1>
+<form action="/update_item" method="post">
+  <p>
+    Otsikko: <br />
+    <input type="text" name="title" value="{{ item.title }}"/>
+  </p>
+  <p>
+      Kuvaus: <br />
+      <textarea name="description" rows="8" cols="40">{{ item.description }}</textarea>
+  </p>
+  <p>
+      Arvostelu: <br />
+      <input type="text" name="review" size="8" value="{{ item.review }}"/> /10
+  </p>
+  <input type="hidden" name="item_id" value="{{ item.id }}" />
+  <input type="submit" value="Päivitä elokuvaa" />
+</form>
+{% endblock %}
