@@ -1,3 +1,4 @@
+import secrets
 import sqlite3
 from flask import Flask
 from flask import abort, redirect, render_template, request, make_response
@@ -16,6 +17,11 @@ def require_login():
     if "user_id" not in session:
         abort(403)
 
+def check_csrf():
+    if "csrf_token" not in request.form:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
 
 @app.route("/")
 def index():
@@ -66,6 +72,7 @@ def edit_images(item_id):
 @app.route("/add_image", methods=["POST"])
 def add_image():
     require_login()
+    check_csrf()
 
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
@@ -98,6 +105,7 @@ def show_image(image_id):
 @app.route("/remove_images", methods=["POST"])
 def remove_images():
     require_login()
+    check_csrf()
 
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
@@ -119,6 +127,7 @@ def new_item():
 @app.route("/create_item", methods=["POST"])
 def create_item():
     require_login()
+    check_csrf()
 
     title = request.form["title"]
     if not title or len(title) > 80:
@@ -143,6 +152,7 @@ def create_item():
 @app.route("/create_comment/<int:item_id>", methods=["POST"])
 def create_comment(item_id):
     require_login()
+    check_csrf()
 
     content = request.form["content"]
     user_id = session["user_id"]
@@ -154,6 +164,7 @@ def create_comment(item_id):
 @app.route("/remove_comment/<int:comment_id>", methods=["GET", "POST"])
 def remove_comment(comment_id):
     require_login()
+
     comment = items.get_comment(comment_id)
     if not comment:
         abort(404)
@@ -164,6 +175,7 @@ def remove_comment(comment_id):
         return render_template("remove_comment.html", comment=comment)
     
     if request.method == "POST":
+        check_csrf()
         if "remove" in request.form:
             items.remove_comment(comment_id)
             return redirect(f"/item/{comment['item_id']}")
@@ -183,6 +195,8 @@ def edit_item(item_id):
 @app.route("/update_item", methods=["POST"])
 def update_item():
     require_login()
+    check_csrf()
+
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
     if item["user_id"] != session["user_id"]:
@@ -199,6 +213,7 @@ def update_item():
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
 def remove_item(item_id):
     require_login()
+
     item = items.get_item(item_id)
     if item["user_id"] != session["user_id"]:
         abort(403)
@@ -207,6 +222,7 @@ def remove_item(item_id):
         return render_template("remove_item.html", item=item)
     
     if request.method == "POST":
+        check_csrf()
         if "remove" in request.form:
             items.remove_item(item_id)
             return redirect("/")
@@ -244,7 +260,7 @@ def login():
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
-            print("DEBUG SESSION:", session)  # Remove this in production
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             return "VIRHE: väärä tunnus tai salasana"

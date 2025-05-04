@@ -30,6 +30,7 @@
       <option value="muu">muu</option>
     </select>
   </p>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <input type="submit" value="Luo Elokuva" />
 </form>
 {% endblock %}

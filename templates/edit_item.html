@@ -18,6 +18,7 @@
       <input type="text" name="review" size="8" value="{{ item.review }}"/> /10
   </p>
   <input type="hidden" name="item_id" value="{{ item.id }}" />
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <input type="submit" value="Päivitä elokuvaa" />
 </form>
 {% endblock %}
