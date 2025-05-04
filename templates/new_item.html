@@ -4,19 +4,23 @@
 
 {% block content %}
 <h1>Uusi Elokuva</h1>
+
 <form action="/create_item" method="post">
   <p>
     <label for="title">Otsikko:</label> <br />
     <input type="text" name="title" id="title" maxlength="50" required />
   </p>
+
   <p>
     <label for="description">Kuvaus</label>: <br />
     <textarea name="description" id="description" rows="8" cols="60" maxlength="1000" required></textarea>
   </p>
+
   <p>
     <label for="review">Arvostelu</label>: <br />
     <input type="text" name="review" id="review" size="8" pattern="^([0-9]|10)" required /> /10
   </p>
+
   <p>
     <label for="genre">Genre</label>: <br />
     <select name="genre" id="genre" required>
@@ -30,7 +34,8 @@
       <option value="muu">muu</option>
     </select>
   </p>
-  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
   <input type="submit" value="Luo Elokuva" />
 </form>
 {% endblock %}

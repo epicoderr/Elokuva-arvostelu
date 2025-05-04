@@ -15,8 +15,14 @@ def get_classes(item_id):
     return db.query(sql, [item_id])
 
 def get_items():
-    sql = "SELECT id, title FROM items ORDER BY id DESC"
-    
+    sql = """
+        SELECT items.id, 
+               items.title,
+               users.username 
+        FROM items 
+        JOIN users ON items.user_id = users.id
+        ORDER BY items.id DESC
+    """
     return db.query(sql)
 
 def get_item(item_id):
@@ -29,7 +35,7 @@ def get_item(item_id):
            users.username
     FROM items, users
     WHERE items.user_id = users.id AND items.id = ?
-"""
+    """
     result = db.query(sql, [item_id])[0]
     return result if result else None
 
@@ -39,13 +45,17 @@ def update_item(item_id, title, description, review):
            description = ?, 
            review = ?
     WHERE id = ?
-"""
-    db.execute(sql, [ title, description, review, item_id])
+    """
+    db.execute(sql, [title, description, review, item_id])
 
 def remove_item(item_id):
+    sql = "DELETE FROM comments WHERE item_id = ?"
+    db.execute(sql, [item_id])
+    sql = "DELETE FROM images WHERE item_id = ?"
+    db.execute(sql, [item_id])
     sql = "DELETE FROM items WHERE id = ?"
-    db.execute(sql, [ item_id])
-
+    db.execute(sql, [item_id])
+    
 def find_items(query):
     sql = """
         SELECT id, title
@@ -110,5 +120,3 @@ def get_image(image_id):
 def remove_image(item_id, image_id):
     sql = "DELETE FROM images WHERE id = ? AND item_id = ?"
     db.execute(sql, [image_id, item_id])
-
-

@@ -5,10 +5,11 @@
 {% block content %}
 <h1>Elokuvan poisto</h1>
 <p>Elokuva: {{ item.title }}</p>
-<p>Haluatko varmasti postaa tämän elokuvan?</p>
+<p>Haluatko varmasti poistaa tämän elokuvan?</p>
+
 <form action="/remove_item/{{ item.id }}" method="post">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" name="remove" value="Poista elokuva">
-    <input type="submit" name="back" value="Palaa takaisin">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+  <input type="submit" name="remove" value="Poista elokuva" />
+  <input type="submit" name="back" value="Palaa takaisin" />
 </form>
 {% endblock %}

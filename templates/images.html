@@ -12,12 +12,12 @@
 
 <form action="/remove_images" method="post">
   {% for image in images %}
-  <input type="checkbox" name="image_id" value="{{ image.id }}">
-  <img src="/image/{{ image.id }}" alt="Ilmoituksen kuva" />
-  <br />
+    <input type="checkbox" name="image_id" value="{{ image.id }}">
+    <img src="/image/{{ image.id }}" alt="Ilmoituksen kuva" />
+    <br />
   {% endfor %}
   <input type="hidden" name="item_id" value="{{ item.id }}">
-  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
   <p>
     <input type="submit" value="Poista valitut" />
   </p>
@@ -30,7 +30,7 @@
     <input type="file" name="image" id="image" accept=".png" />
   </p>
   <input type="hidden" name="item_id" value="{{ item.id }}">
-  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
   <input type="submit" value="Lähetä" />
 </form>
 
